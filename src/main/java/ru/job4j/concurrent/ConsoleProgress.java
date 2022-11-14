@@ -18,13 +18,11 @@ public class ConsoleProgress implements Runnable {
             for (char c : process) {
                 System.out.print("\r load: " + c);
             }
-            /**
-             * try {
-             *   sleep(500);
-             * } catch (InterruptedException e) {
-             *    throw new RuntimeException(e);
-             * }
-             */
+            try {
+                sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
