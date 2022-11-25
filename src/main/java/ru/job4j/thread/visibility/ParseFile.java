@@ -1,6 +1,9 @@
 package ru.job4j.thread.visibility;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.function.Predicate;
 
 public final class ParseFile {
@@ -10,16 +13,28 @@ public final class ParseFile {
         this.file = file;
     }
 
-    public String content(Predicate<Character> filter) throws IOException {
-        String output = "";
-        try (InputStream i = new FileInputStream(file)) {
+    public synchronized String content(Predicate<Character> filter) throws IOException {
+        StringBuilder output = new StringBuilder();
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(file))) {
             int data;
-            while ((data = i.read()) > 0) {
+            while ((data = in.read()) != -1) {
                 if (filter.test((char) data)) {
-                    output += (char) data;
+                    output.append((char) data);
                 }
             }
         }
-        return output;
+        return output.toString();
+    }
+
+    public synchronized String getContentWithoutUnicode() throws IOException {
+        Predicate<Character> filter = data -> data < 0x80;
+        return content(filter);
+    }
+
+    public synchronized String getContent() throws IOException {
+        Predicate<Character> filter = data -> {
+            return true;
+        };
+        return content(filter);
     }
 }
