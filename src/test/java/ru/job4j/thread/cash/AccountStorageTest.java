@@ -1,7 +1,9 @@
 package ru.job4j.thread.cash;
 
 import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatException;
 
 class AccountStorageTest {
 
@@ -9,8 +11,6 @@ class AccountStorageTest {
     void whenAdd() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
-        storage.add(new Account(1, 500));
-        storage.add(new Account(1, 10));
         var firstAccount = storage.getById(1)
                 .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
         assertThat(firstAccount.amount()).isEqualTo(100);
@@ -46,5 +46,28 @@ class AccountStorageTest {
                 .orElseThrow(() -> new IllegalStateException("Not found account by id = 1"));
         assertThat(firstAccount.amount()).isEqualTo(0);
         assertThat(secondAccount.amount()).isEqualTo(200);
+    }
+
+    @Test
+    void whenNotEnoughMoneyToTransfer() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 100));
+        storage.add(new Account(2, 100));
+        assertThatException().isThrownBy(() -> storage.transfer(1, 2, 300));
+    }
+
+    @Test
+    void whenAccDoesNotExistInTransfer() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 100));
+        storage.add(new Account(2, 100));
+        assertThat(storage.transfer(3, 5, 100)).isFalse();
+    }
+
+    @Test
+    void whenAccDuplicatedInTransfer() {
+        var storage = new AccountStorage();
+        storage.add(new Account(1, 100));
+        assertThat(storage.transfer(1, 1, 100)).isFalse();
     }
 }

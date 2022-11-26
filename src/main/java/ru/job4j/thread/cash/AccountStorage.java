@@ -5,33 +5,46 @@ import net.jcip.annotations.ThreadSafe;
 
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @ThreadSafe
 public class AccountStorage {
     @GuardedBy("this")
     private final HashMap<Integer, Account> accounts = new HashMap<>();
-    private final AtomicInteger id = new AtomicInteger();
 
     public synchronized boolean add(Account account) {
-        int i = id.incrementAndGet();
-        accounts.put(i, account);
-        return accounts.get(i) != null;
+        accounts.put(account.id(), account);
+        return accounts.get(account.id()) != null;
     }
 
-    public boolean update(Account account) {
-        return false;
+    public synchronized boolean update(Account account) {
+        int id = account.id();
+        return accounts.replace(id, accounts.get(id), account);
     }
 
-    public boolean delete(int id) {
-        return false;
+    public synchronized boolean delete(int id) {
+        return accounts.remove(id, accounts.get(id));
     }
 
-    public Optional<Account> getById(int id) {
-        return Optional.empty();
+    public synchronized Optional<Account> getById(int id) {
+        return Optional.ofNullable(accounts.get(id));
     }
 
-    public boolean transfer(int fromId, int toId, int amount) {
-        return false;
+    public synchronized boolean transfer(int fromId, int toId, int amount) {
+        Optional<Account> accountFrom = getById(fromId);
+        Optional<Account> accountTo = getById(toId);
+        boolean rsl = false;
+
+        if (!accountFrom.equals(accountTo) && accountFrom.isPresent() && accountTo.isPresent()) {
+            Account accFr = accountFrom.get();
+            Account accTo = accountTo.get();
+            if (accFr.amount() >= amount) {
+                update(new Account(accFr.id(), accFr.amount() - amount));
+                update(new Account(accTo.id(), accTo.amount() + amount));
+                rsl = true;
+            } else {
+                throw new IllegalArgumentException("Not Enough Money To Transfer");
+            }
+        }
+        return rsl;
     }
 }
