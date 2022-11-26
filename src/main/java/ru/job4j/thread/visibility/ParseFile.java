@@ -32,9 +32,6 @@ public final class ParseFile {
     }
 
     public synchronized String getContent() throws IOException {
-        Predicate<Character> filter = data -> {
-            return true;
-        };
-        return content(filter);
+        return content((data) -> true);
     }
 }
