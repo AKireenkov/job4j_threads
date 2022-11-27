@@ -12,8 +12,7 @@ public class AccountStorage {
     private final HashMap<Integer, Account> accounts = new HashMap<>();
 
     public synchronized boolean add(Account account) {
-        accounts.put(account.id(), account);
-        return accounts.get(account.id()) != null;
+        return accounts.putIfAbsent(account.id(), account) == null;
     }
 
     public synchronized boolean update(Account account) {
@@ -37,13 +36,13 @@ public class AccountStorage {
         if (!accountFrom.equals(accountTo) && accountFrom.isPresent() && accountTo.isPresent()) {
             Account accFr = accountFrom.get();
             Account accTo = accountTo.get();
-            if (accFr.amount() >= amount) {
-                update(new Account(accFr.id(), accFr.amount() - amount));
-                update(new Account(accTo.id(), accTo.amount() + amount));
-                rsl = true;
-            } else {
+            if (accFr.amount() < amount) {
                 throw new IllegalArgumentException("Not Enough Money To Transfer");
+
             }
+            update(new Account(accFr.id(), accFr.amount() - amount));
+            update(new Account(accTo.id(), accTo.amount() + amount));
+            rsl = true;
         }
         return rsl;
     }
