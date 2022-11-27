@@ -7,12 +7,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class SingleLockListTest {
 
     @Test
-    public void whenIt(){
+    public void whenIt() {
         var init = new ArrayList<Integer>();
         SingleLockList<Integer> list = new SingleLockList<>(init);
         list.add(1);
