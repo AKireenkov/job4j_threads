@@ -1,14 +1,14 @@
 package ru.job4j.thread.cash;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatException;
 
-class AccountStorageTest {
+public class AccountStorageTest {
 
     @Test
-    void whenAdd() {
+    public void whenAdd() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         var firstAccount = storage.getById(1)
@@ -17,7 +17,7 @@ class AccountStorageTest {
     }
 
     @Test
-    void whenUpdate() {
+    public void whenUpdate() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.update(new Account(1, 200));
@@ -27,7 +27,7 @@ class AccountStorageTest {
     }
 
     @Test
-    void whenDelete() {
+    public void whenDelete() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.delete(1);
@@ -35,7 +35,7 @@ class AccountStorageTest {
     }
 
     @Test
-    void whenTransfer() {
+    public void whenTransfer() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.add(new Account(2, 100));
@@ -49,7 +49,7 @@ class AccountStorageTest {
     }
 
     @Test
-    void whenNotEnoughMoneyToTransfer() {
+    public void whenNotEnoughMoneyToTransfer() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.add(new Account(2, 100));
@@ -57,7 +57,7 @@ class AccountStorageTest {
     }
 
     @Test
-    void whenAccDoesNotExistInTransfer() {
+    public void whenAccDoesNotExistInTransfer() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.add(new Account(2, 100));
@@ -65,7 +65,7 @@ class AccountStorageTest {
     }
 
     @Test
-    void whenAccDuplicatedInTransfer() {
+    public void whenAccDuplicatedInTransfer() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         assertThat(storage.transfer(1, 1, 100)).isFalse();
