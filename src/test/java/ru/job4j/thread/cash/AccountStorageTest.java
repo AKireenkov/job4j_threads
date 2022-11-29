@@ -1,14 +1,14 @@
 package ru.job4j.thread.cash;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatException;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AccountStorageTest {
+class AccountStorageTest {
 
     @Test
-    public void whenAdd() {
+    void whenAdd() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         var firstAccount = storage.getById(1)
@@ -17,7 +17,7 @@ public class AccountStorageTest {
     }
 
     @Test
-    public void whenUpdate() {
+    void whenUpdate() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.update(new Account(1, 200));
@@ -27,7 +27,7 @@ public class AccountStorageTest {
     }
 
     @Test
-    public void whenDelete() {
+    void whenDelete() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.delete(1);
@@ -35,7 +35,7 @@ public class AccountStorageTest {
     }
 
     @Test
-    public void whenTransfer() {
+    void whenTransfer() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.add(new Account(2, 100));
@@ -49,15 +49,16 @@ public class AccountStorageTest {
     }
 
     @Test
-    public void whenNotEnoughMoneyToTransfer() {
+    void whenNotEnoughMoneyToTransfer() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.add(new Account(2, 100));
-        assertThatException().isThrownBy(() -> storage.transfer(1, 2, 300));
+        assertThrows(IllegalArgumentException.class,
+                () -> storage.transfer(1, 2, 300));
     }
 
     @Test
-    public void whenAccDoesNotExistInTransfer() {
+    void whenAccDoesNotExistInTransfer() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.add(new Account(2, 100));
@@ -65,7 +66,7 @@ public class AccountStorageTest {
     }
 
     @Test
-    public void whenAccDuplicatedInTransfer() {
+    void whenAccDuplicatedInTransfer() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         assertThat(storage.transfer(1, 1, 100)).isFalse();
