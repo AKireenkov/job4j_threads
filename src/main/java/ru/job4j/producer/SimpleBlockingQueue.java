@@ -1,4 +1,4 @@
-package ru.job4j.producerConsumer;
+package ru.job4j.producer;
 
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
