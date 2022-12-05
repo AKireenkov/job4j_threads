@@ -9,6 +9,10 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Взяли из очереди значение " + simpleBlockingQueue.poll());
+        try {
+            System.out.println("Взяли из очереди значение " + simpleBlockingQueue.poll());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

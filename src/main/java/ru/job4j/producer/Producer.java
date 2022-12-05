@@ -12,6 +12,10 @@ public class Producer implements Runnable {
     @Override
     public void run() {
         System.out.println("Помещаем в очередь значение " + value);
-        simpleBlockingQueue.offer(value);
+        try {
+            simpleBlockingQueue.offer(value);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
