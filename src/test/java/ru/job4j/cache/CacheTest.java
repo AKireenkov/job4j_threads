@@ -32,6 +32,7 @@ class CacheTest {
         boolean rsl = cache.update(base2);
         assertThat(rsl).isTrue();
         assertThat(cache.get(1).getName()).isEqualTo("Denis");
+        assertThat(cache.get(1).getVersion()).isEqualTo(2);
     }
 
     @Test
