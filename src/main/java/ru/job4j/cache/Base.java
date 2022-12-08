@@ -2,6 +2,13 @@ package ru.job4j.cache;
 
 import java.util.Objects;
 
+/**
+ * Базовая модель данных. Версия каждого объекта меняется при каждом вызове метода update().
+ *
+ * @author Andrey Kireenkov
+ * @version 1.0
+ * @since 08.12.2022
+ */
 public class Base {
     private final int id;
     private final int version;
