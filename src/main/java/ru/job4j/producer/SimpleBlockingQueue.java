@@ -32,12 +32,14 @@ public class SimpleBlockingQueue<T> {
      * @param value элемент, который необходимо добавить в очередь
      * @throws InterruptedException исключение, может возникнуть при вызове wait()
      */
-    public synchronized void offer(T value) throws InterruptedException {
-        while (queue.size() == size) {
-            queue.wait();
+    public void offer(T value) throws InterruptedException {
+        synchronized (queue) {
+            while (queue.size() == size) {
+                queue.wait();
+            }
+            queue.offer(value);
+            queue.notify();
         }
-        queue.offer(value);
-        queue.notify();
     }
 
     /**
@@ -48,13 +50,14 @@ public class SimpleBlockingQueue<T> {
      * @return элемент, который взяли из очереди.
      * @throws InterruptedException исключение, может возникнуть при вызове wait()
      */
-    public synchronized T poll() throws InterruptedException {
-        while (queue.size() == 0) {
-            queue.wait();
-
-        }
+    public T poll() throws InterruptedException {
         T result = queue.poll();
-        queue.notify();
+        synchronized (queue) {
+            while (queue.size() == 0) {
+                queue.wait();
+            }
+            queue.notify();
+        }
         return result;
     }
 }

@@ -30,9 +30,9 @@ public class ParallelSearch {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        consumer.interrupt();
                     }
                 }
         ).start();
+        consumer.interrupt();
     }
 }
