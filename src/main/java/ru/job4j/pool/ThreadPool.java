@@ -30,9 +30,6 @@ public class ThreadPool {
             thread.start();
             this.threads.add(thread);
         }
-        for (Thread thread : threads) {
-            new Thread(thread).start();
-        }
     }
 
     /**
