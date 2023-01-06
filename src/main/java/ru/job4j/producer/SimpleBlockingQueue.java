@@ -17,7 +17,7 @@ import java.util.Queue;
 public class SimpleBlockingQueue<T> {
 
     @GuardedBy("this")
-    private Queue<T> queue = new LinkedList<>();
+    private volatile Queue<T> queue = new LinkedList<>();
     private final int size;
 
     public SimpleBlockingQueue(int size) {
