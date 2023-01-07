@@ -56,4 +56,11 @@ public class SimpleBlockingQueue<T> {
         notify();
         return result;
     }
+
+    /**
+     * @return возвращает true, если очередь пустая.
+     */
+    public boolean isEmpty() {
+        return queue.size() == 0;
+    }
 }
