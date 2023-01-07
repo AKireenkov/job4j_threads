@@ -34,10 +34,10 @@ public class SimpleBlockingQueue<T> {
      */
     public synchronized void offer(T value) throws InterruptedException {
         while (queue.size() == size) {
-            queue.wait();
+            wait();
         }
         queue.offer(value);
-        queue.notify();
+        notify();
     }
 
     /**
@@ -50,11 +50,10 @@ public class SimpleBlockingQueue<T> {
      */
     public synchronized T poll() throws InterruptedException {
         while (queue.size() == 0) {
-            queue.wait();
-
+            wait();
         }
         T result = queue.poll();
-        queue.notify();
+        notify();
         return result;
     }
 }
