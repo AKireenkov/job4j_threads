@@ -41,9 +41,8 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
             firstArrayParallelSearch.fork();
             secondArrayParallelSearch.fork();
             return Math.max(firstArrayParallelSearch.join(), secondArrayParallelSearch.join());
-        } else {
-            return search();
         }
+        return search();
     }
 
     /**
@@ -56,6 +55,7 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
         for (int i = from; i <= to; i++) {
             if (array[i].equals(element)) {
                 rsl = i;
+                break;
             }
         }
         return rsl;
