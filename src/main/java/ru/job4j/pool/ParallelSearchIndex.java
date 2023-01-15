@@ -1,5 +1,6 @@
 package ru.job4j.pool;
 
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
 /**
@@ -34,15 +35,15 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
     @Override
     protected Integer compute() {
         int arrSize = to - from + 1;
-        if (to > MIN_SIZE_ARRAY && arrSize > 2) {
-            int mid = (from + to) / 2;
-            ParallelSearchIndex<T> firstArrayParallelSearch = new ParallelSearchIndex<T>(array, from, mid, element);
-            ParallelSearchIndex<T> secondArrayParallelSearch = new ParallelSearchIndex<T>(array, mid + 1, to, element);
-            firstArrayParallelSearch.fork();
-            secondArrayParallelSearch.fork();
-            return Math.max(firstArrayParallelSearch.join(), secondArrayParallelSearch.join());
+        if (to < MIN_SIZE_ARRAY && arrSize <= 2) {
+            return lineSearch();
         }
-        return search();
+        int mid = (from + to) / 2;
+        ParallelSearchIndex<T> firstArrayParallelSearch = new ParallelSearchIndex<T>(array, from, mid, element);
+        ParallelSearchIndex<T> secondArrayParallelSearch = new ParallelSearchIndex<T>(array, mid + 1, to, element);
+        firstArrayParallelSearch.fork();
+        secondArrayParallelSearch.fork();
+        return Math.max(firstArrayParallelSearch.join(), secondArrayParallelSearch.join());
     }
 
     /**
@@ -50,7 +51,7 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
      *
      * @return -1 если элемент не найден, либо, индекс найденного элемента.
      */
-    private Integer search() {
+    private Integer lineSearch() {
         int rsl = -1;
         for (int i = from; i <= to; i++) {
             if (array[i].equals(element)) {
@@ -59,5 +60,12 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
             }
         }
         return rsl;
+    }
+
+    public static Object search(Object[] array, Object element) {
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        int to = array.length - 1;
+        int from = 0;
+        return forkJoinPool.invoke(new ParallelSearchIndex<>(array, from, to, element));
     }
 }
