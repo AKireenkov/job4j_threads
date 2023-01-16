@@ -61,7 +61,7 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
         return rsl;
     }
 
-    public static<T> Integer search(T[] array, T element) {
+    public static <T> Integer search(T[] array, T element) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
         return forkJoinPool.invoke(new ParallelSearchIndex<>(array, 0, array.length - 1, element));
     }
