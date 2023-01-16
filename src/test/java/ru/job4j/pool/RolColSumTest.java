@@ -6,7 +6,8 @@ import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static ru.job4j.pool.RolColSum.*;
+import static ru.job4j.pool.RolColSum.asyncSum;
+import static ru.job4j.pool.RolColSum.sum;
 
 class RolColSumTest {
     @Test
