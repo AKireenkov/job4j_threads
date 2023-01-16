@@ -34,8 +34,7 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
      */
     @Override
     protected Integer compute() {
-        int arrSize = to - from + 1;
-        if (to < MIN_SIZE_ARRAY && arrSize <= 2) {
+        if ((to - from) <= MIN_SIZE_ARRAY) {
             return lineSearch();
         }
         int mid = (from + to) / 2;
@@ -62,10 +61,8 @@ public class ParallelSearchIndex<T> extends RecursiveTask<Integer> {
         return rsl;
     }
 
-    public static Object search(Object[] array, Object element) {
+    public static<T> Integer search(T[] array, T element) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
-        int to = array.length - 1;
-        int from = 0;
-        return forkJoinPool.invoke(new ParallelSearchIndex<>(array, from, to, element));
+        return forkJoinPool.invoke(new ParallelSearchIndex<>(array, 0, array.length - 1, element));
     }
 }
